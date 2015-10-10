@@ -1,4 +1,4 @@
-package com.codereview.remi.codereview;
+package com.thinkasanengineer.android;
 
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -13,9 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
-import com.codereview.remi.codereview.fragments.ReviewFragment;
+import com.codereview.remi.codereview.R;
+import com.thinkasanengineer.android.fragments.ReviewFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

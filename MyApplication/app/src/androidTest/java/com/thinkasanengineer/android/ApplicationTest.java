@@ -1,4 +1,4 @@
-package com.codereview.remi.codereview;
+package com.thinkasanengineer.android;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

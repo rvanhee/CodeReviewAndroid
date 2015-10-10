@@ -1,4 +1,4 @@
-package com.codereview.remi.codereview.fragments;
+package com.thinkasanengineer.android.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
