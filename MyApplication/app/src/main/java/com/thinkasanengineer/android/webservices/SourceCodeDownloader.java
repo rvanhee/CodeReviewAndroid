@@ -1,4 +1,4 @@
-package com.thinkasanengineer.android.async;
+package com.thinkasanengineer.android.webservices;
 
 import android.os.AsyncTask;
 
@@ -18,7 +18,6 @@ public class SourceCodeDownloader extends AsyncTask<Void, Void, String> { //chan
 
 
     protected void onPostExecute(String sourceCode) {
-        // your stuff
         listener.onSourceCodeDownloaded(sourceCode);
     }
 
@@ -26,14 +25,12 @@ public class SourceCodeDownloader extends AsyncTask<Void, Void, String> { //chan
     protected String doInBackground(Void... voids) {
         try {
             ApiClientFactory factory = new ApiClientFactory();
+
             // Create a client.
             final CodeReviewMeClient client = factory.apiKey("LlKxZxjiTp9PbSL5amWqq0vdjarU39S2bVYa4Uuj").build(CodeReviewMeClient.class);
 
             SourceCodeGETResponseModel response = client.sourceCodeGet("github", "/auchenberg/chrome-devtools-app/blob/master/app/TargetsCollection.js");
-
-            SourceCodeGETResponseModel.MyObject myObj = response.getData();
-            return myObj.getSource();
-
+            return response.getSource();
 
         } catch (Exception e) {
             e.printStackTrace();

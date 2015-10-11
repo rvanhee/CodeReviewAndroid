@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:background="@android:color/holo_orange_light"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="test Title"
+            android:textSize="20dp"
+            android:id="@+id/reviewLineTitle"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textMultiLine"
+            android:layout_margin="20dp"
+            android:background="@android:color/white"
+            android:id="@+id/editText"
+            android:padding="10dp"
+            android:gravity="top"/>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

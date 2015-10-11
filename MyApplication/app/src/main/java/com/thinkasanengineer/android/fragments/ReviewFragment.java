@@ -2,7 +2,6 @@ package com.thinkasanengineer.android.fragments;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -11,12 +10,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.amazonaws.mobileconnectors.apigateway.ApiClientFactory;
 import com.codereview.remi.codereview.R;
-import com.codereviewme.clientsdk.CodeReviewMeClient;
-import com.codereviewme.clientsdk.model.SourceCodeGETResponseModel;
-import com.thinkasanengineer.android.async.SourceCodeDownloader;
-
+import com.thinkasanengineer.android.webservices.SourceCodeDownloader;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,34 +30,6 @@ public class ReviewFragment extends Fragment implements SourceCodeDownloader.OnS
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_review, container, false);
         ButterKnife.bind(this, v);
-
-
-       /* ApiClientFactory factory = new ApiClientFactory();
-        // Create a client.
-        final CodeReviewMeClient client = factory.apiKey("LlKxZxjiTp9PbSL5amWqq0vdjarU39S2bVYa4Uuj").build(CodeReviewMeClient.class);*/
-
-/*        Thread task = new Thread()
-        {
-            @Override
-            public void run()
-            {
-                try {
-
-                    SourceCodeGETResponseModel response = client.sourceCodeGet("github", "/auchenberg/chrome-devtools-app/blob/master/app/TargetsCollection.js");
-
-                    SourceCodeGETResponseModel.MyObject myObj = response.getData();
-                    displaySourceCode(myObj.getSource());
-
-
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-
-            }
-
-        };
-
-        task.start();*/
 
         new SourceCodeDownloader(this).execute();
 
@@ -84,12 +51,38 @@ public class ReviewFragment extends Fragment implements SourceCodeDownloader.OnS
                 "for (var target of this.collection.values()) {\n        " +
                 "targets.push(target);\n    }\n\n    return targets;\n\n}\n\nmodule.exports = TargetsCollection;\n";*/
 
+        if (code != null && !code.equals("")) {
 
-        String[] lines = code.split("\n");
+            String[] lines = code.split("\n");
 
-        for (String line : lines) {
+            for (int i = 0; i < lines.length; i++) {
+                final TextView textView = new TextView(getActivity());
+                final String line = lines[i];
+
+                textView.setText(i+1 + ".   " + line);
+                textView.setTag(i + 1);
+
+
+                textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("line", line);
+                        bundle.putString("lineNb", textView.getTag().toString());
+
+                        ReviewDialogFragment reviewDialogFragment = new ReviewDialogFragment();
+                        reviewDialogFragment.setArguments(bundle);
+                        reviewDialogFragment.show(getFragmentManager(), null);
+
+                    }
+                });
+
+                textViewContainer.addView(textView);
+            }
+
+        } else {
             TextView textView = new TextView(getActivity());
-            textView.setText(line);
+            textView.setText("no Data");
             textViewContainer.addView(textView);
         }
     }
