@@ -32,12 +32,11 @@
             <HorizontalScrollView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-
                 android:layout_weight="3">
 
                 <LinearLayout
                     android:id="@+id/textViewContainer"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
 
@@ -75,8 +74,16 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/colorPrimaryDark"
-                android:orientation="vertical"
-               />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Comments"
+                    android:gravity="center"
+                    android:background="@android:color/holo_blue_bright"/>
+
+                </LinearLayout>
 
 
         </LinearLayout>

@@ -2,6 +2,7 @@ package com.thinkasanengineer.android.fragments;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -100,45 +101,13 @@ public class ReviewFragment extends Fragment implements SourceCodeDownloader.OnS
             String[] lines = code.split("\n");
 
             for (int i = 0; i < lines.length; i++) {
-                final TextView textView = new TextView(getActivity());
-                final String line = lines[i];
 
-                textView.setText(i + 1 + ".   " + line);
-                textView.setTag(i + 1);
+                setCodeTextView(i + 1, lines);
 
+                setRightPanelAction(i +1);
 
-                textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("line", line);
-                        bundle.putString("lineNb", textView.getTag().toString());
+                setRightPanel(i +1);
 
-                        ReviewDialogFragment reviewDialogFragment = new ReviewDialogFragment();
-                        reviewDialogFragment.setArguments(bundle);
-                        reviewDialogFragment.show(getFragmentManager(), null);
-
-                    }
-                });
-
-
-                ImageButton imageButton = new ImageButton(getActivity());
-                imageButton.setImageResource(R.drawable.ic_bug_report_black_18dp);
-
-                //TODO: Height should not be set manually. Need to include the image in the line from the left panel
-                imageButton.setLayoutParams(new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT, 27));
-                imageButton.setVisibility(View.INVISIBLE);
-
-                //TODO: remove this. This is just for POC
-                if (i == 9 || i == 13 || i == 24){
-                    imageButton.setVisibility(View.VISIBLE);
-                }
-
-                rightPanelAction.addView(imageButton);
-
-
-                textViewContainer.addView(textView);
             }
 
         } else {
@@ -147,6 +116,63 @@ public class ReviewFragment extends Fragment implements SourceCodeDownloader.OnS
             textViewContainer.addView(textView);
         }
     }
+
+
+    private void setCodeTextView(int lineNb, String[] lines){
+        final TextView textView = new TextView(getActivity());
+        final String line = lines[lineNb - 1];
+
+        textView.setText(lineNb + ".   " + line);
+        textView.setTag(lineNb);
+
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("line", line);
+                bundle.putString("lineNb", textView.getTag().toString());
+
+                ReviewDialogFragment reviewDialogFragment = new ReviewDialogFragment();
+                reviewDialogFragment.setArguments(bundle);
+                reviewDialogFragment.show(getFragmentManager(), null);
+
+            }
+        });
+
+        textViewContainer.addView(textView);
+    }
+
+
+    private void setRightPanelAction(int lineNb){
+        ImageButton imageButton = new ImageButton(getActivity());
+        imageButton.setImageResource(R.drawable.ic_bug_report_black_18dp);
+
+        //TODO: Height should not be set manually. Need to include the image in the line from the left panel
+        imageButton.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, 27));
+        imageButton.setVisibility(View.INVISIBLE);
+
+        //TODO: remove this. This is just for POC
+        if (lineNb == 10 || lineNb == 14 || lineNb == 25){
+            imageButton.setVisibility(View.VISIBLE);
+        }
+
+        rightPanelAction.addView(imageButton);
+
+    }
+
+    private void setRightPanel(int lineNb){
+        final TextView textView = new TextView(getActivity());
+        textView.setTextColor(Color.WHITE);
+        if (lineNb == 10 || lineNb == 14 || lineNb == 25) {
+            textView.setText("This is a comment");
+        }
+
+        rightPanel.addView(textView);
+
+
+    }
+
 
     @Override
     public void onSourceCodeDownloaded(String sourceCode) {
