@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,6 +26,18 @@ public class ReviewFragment extends Fragment implements SourceCodeDownloader.OnS
     @Bind(R.id.textViewContainer)
     LinearLayout textViewContainer;
 
+    @Bind(R.id.rightPanelButton)
+    ImageButton rightPanelButton;
+
+    @Bind(R.id.rightPanel)
+    LinearLayout rightPanel;
+
+    @Bind(R.id.rightPanelAction)
+    LinearLayout rightPanelAction;
+
+    private boolean isRightPanelVisible = true;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,11 +46,42 @@ public class ReviewFragment extends Fragment implements SourceCodeDownloader.OnS
 
         new SourceCodeDownloader(this).execute();
 
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.expandableListViewContainer, new ExpandableListViewContainer(), null).commit();
+        initTopPanel();
+        initRightPanel();
 
         return v;
     }
+
+
+    private void initTopPanel(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.expandableListViewContainer, new ExpandableListViewContainer(), null).commit();
+    }
+
+    private void initRightPanel(){
+
+        rightPanelButton.setImageResource(R.drawable.ic_keyboard_arrow_right_black_24dp);
+        rightPanelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                doRightPanelAction();
+            }
+        });
+
+    }
+
+    private void doRightPanelAction(){
+        if (isRightPanelVisible){
+            rightPanel.setVisibility(View.GONE);
+            isRightPanelVisible = false;
+            rightPanelButton.setImageResource(R.drawable.ic_keyboard_arrow_left_black_24dp);
+        } else {
+            rightPanel.setVisibility(View.VISIBLE);
+            isRightPanelVisible = true;
+            rightPanelButton.setImageResource(R.drawable.ic_keyboard_arrow_right_black_24dp);
+        }
+    }
+
 
 
     private void displaySourceCode(String code) {
@@ -59,7 +103,7 @@ public class ReviewFragment extends Fragment implements SourceCodeDownloader.OnS
                 final TextView textView = new TextView(getActivity());
                 final String line = lines[i];
 
-                textView.setText(i+1 + ".   " + line);
+                textView.setText(i + 1 + ".   " + line);
                 textView.setTag(i + 1);
 
 
@@ -77,6 +121,23 @@ public class ReviewFragment extends Fragment implements SourceCodeDownloader.OnS
                     }
                 });
 
+
+                ImageButton imageButton = new ImageButton(getActivity());
+                imageButton.setImageResource(R.drawable.ic_bug_report_black_18dp);
+
+                //TODO: Height should not be set manually. Need to include the image in the line from the left panel
+                imageButton.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT, 27));
+                imageButton.setVisibility(View.INVISIBLE);
+
+                //TODO: remove this. This is just for POC
+                if (i == 9 || i == 13 || i == 24){
+                    imageButton.setVisibility(View.VISIBLE);
+                }
+
+                rightPanelAction.addView(imageButton);
+
+
                 textViewContainer.addView(textView);
             }
 
@@ -89,6 +150,7 @@ public class ReviewFragment extends Fragment implements SourceCodeDownloader.OnS
 
     @Override
     public void onSourceCodeDownloaded(String sourceCode) {
+
         displaySourceCode(sourceCode);
     }
 
